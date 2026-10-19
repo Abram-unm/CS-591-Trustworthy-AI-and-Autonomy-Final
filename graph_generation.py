@@ -9,8 +9,8 @@ node_count = random.randint( 3, 10 )
 
 # Graph for n nodes, each edge with p chance to exist
 # Returns a Gn,p random graph, also known as an Erdos-Renyi graph or a binomial graph.
-# Choose 80% chance for each edge to exist, can easily tweak
-G = networkx.gnp_random_graph( node_count, 0.8 )
+# Choose 60% chance for each edge to exist, can easily tweak
+G = networkx.gnp_random_graph( node_count, 0.6 )
 
 # Give weights to each edge
 for ( source, dest ) in G.edges( ):
@@ -32,7 +32,7 @@ with open( "data/graph.csv", "w", newline="" ) as csvfile:
 
 
 # Draw nodes and edges
-pos = networkx.random_layout( G )
+pos = networkx.spring_layout( G )
 networkx.draw( G, pos )
 
 # Add edge weights
