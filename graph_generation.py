@@ -1,6 +1,7 @@
 import networkx
 import random
 import csv
+import matplotlib.pyplot as plt
 
 
 # Choose random node count in range
@@ -28,3 +29,15 @@ with open( "data/graph.csv", "w", newline="" ) as csvfile:
 
     writer.writeheader( )
     writer.writerows( connections )
+
+
+# Draw nodes and edges
+pos = networkx.random_layout( G )
+networkx.draw( G, pos )
+
+# Add edge weights
+networkx.draw_networkx_edge_labels( G, pos, edge_labels = networkx.get_edge_attributes( G, "weight" ) )
+
+plt.savefig( "data/graph.png" )
+
+plt.close( )
