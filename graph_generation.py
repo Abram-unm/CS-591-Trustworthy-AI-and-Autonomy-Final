@@ -33,16 +33,16 @@ def keymaerafy( G ):
         successorNodes = list( G.successors( node ) )
         for j, nextNode in enumerate( successorNodes ):
             edge_weight = G[node][nextNode]["weight"]
-            keymaera += f"node := {nextNode}; weight := weight + {edge_weight}\n            "
+            keymaera += f"node := {nextNode}; weight := weight + {edge_weight}\n          "
             if j < len( successorNodes ) - 1:
-                keymaera += "++\n            "
+                keymaera += "  ++\n            "
 
-        keymaera += ")\n          "
+        keymaera += ")\n        "
 
         keymaera += ")\n      "
 
         if i < len( G.nodes( ) ) - 1:
-            keymaera += "  ++\n      "
+            keymaera += "  ++\n        "
     
     keymaera += ")*\n    "
 
