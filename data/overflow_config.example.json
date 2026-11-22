@@ -1,0 +1,42 @@
+{
+  "overflow_levels": {
+    "0": 1.0,
+    "1": 0.9,
+    "2": 0.8
+  },
+  "max_inflow_rate": 0.01,
+  "initial_levels": {
+    "0": 0.8,
+    "1": 0.2,
+    "2": 0.1
+  },
+  "outlet_conductances": {
+    "0": 0.2,
+    "1": 0.2,
+    "2": 0.2
+  },
+  "modes": [
+    {
+      "when": [
+        {
+          "left": {"node": "0"},
+          "op": ">=",
+          "right": {"constant": 0.5}
+        }
+      ],
+      "active_edges": [["0", "1"], ["1", "2"]],
+      "active_outlets": ["0", "1", "2"]
+    },
+    {
+      "when": [
+        {
+          "left": {"node": "0"},
+          "op": "<",
+          "right": {"constant": 0.5}
+        }
+      ],
+      "active_edges": [["0", "2"], ["1", "2"]],
+      "active_outlets": ["0", "1", "2"]
+    }
+  ]
+}

@@ -79,11 +79,16 @@ G = G.to_directed( )
 connections = []
 
 for ( source, dest ) in G.edges( ):
-    connections.append( {"source": source, "dest": dest, "weight": G.edges[source, dest]["weight"]} )
+    connections.append( {
+        "source": source,
+        "dest": dest,
+        "weight": G.edges[source, dest]["weight"],
+        "max_flow_rate": "",
+    } )
 
 # write to csv
 with open( "data/graph.csv", "w", newline="" ) as csvfile:
-    fieldnames = ["source", "dest", "weight"]
+    fieldnames = ["source", "dest", "weight", "max_flow_rate"]
     writer = csv.DictWriter( csvfile, fieldnames = fieldnames )
 
     writer.writeheader( )
