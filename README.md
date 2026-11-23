@@ -1,6 +1,10 @@
 # CS-591-Trustworthy-AI-and-Autonomy-Final
 The repository for the UNM CS 591 final project in the Fall 2026 semester. By Felix Oteng Mensah, Jocelyn Dailey, and Abram Iverson.
 
+## Purpose
+This repository holds code for generating random weighted graphs to combine with constraints to create a KeymaeraX format test to determine if nodes do not surpass a certain value as a barrier function certificate.  
+The intent is to model pipe-reservoir systems between 3-10 reservoirs where each graph node represents a reservoir in the system and each edge between nodes represents a pipe connecting two reservoirs.
+
 ## Install
 ### Option 1
 1. Clone this repository.  
