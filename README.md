@@ -26,3 +26,7 @@ The intent is to model pipe-reservoir systems between 3-10 reservoirs where each
 4. Run KeymaeraX.
 5. Import file from ```working_directory/keymaera/graph.kyx```.
 6. Run test in KeymaeraX. 
+### Examples
+- ./keymaera/overflow_safety.kyx contains a minimal three-reservoir problem with no minimum-level requirement, and no saturating flow in channels. The switching policy (from overflow_config.example.json) is trivial, with all channels open at all times.
+- ./keymaera/overflow_saturated_minimum.kyx is a slightly more sophisticated example, with minimum levels to be maintained in each reservoir and saturating flows through each channel. It should take less than one minute to prove that the feedback switching policy is safe.
+Proof traces for each problem are provided in the corresponding ./keymaera/\*.kyp file.
