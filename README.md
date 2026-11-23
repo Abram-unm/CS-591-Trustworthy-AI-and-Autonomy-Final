@@ -25,7 +25,8 @@ The intent is to model pipe-reservoir systems between 3-10 reservoirs where each
 
 ### Optional
 
-- KeymaeraX 5.1.2
+- KeymaeraX 5.1.2 (requires Wolfram Engine)
+- Wolfram Engine
 
 ## How to run
 
