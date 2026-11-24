@@ -1,11 +1,13 @@
+import argparse
 import networkx
 import random
 import csv
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 
 # Function to turn networkx graph into KeymaeraX code
-def keymaerafy( G ):
+def keymaerafy( G, output_path ):
     # Program start
     keymaera = "Theorem \"ReservoirSafety\"\n  "
 
@@ -52,59 +54,80 @@ def keymaerafy( G ):
     keymaera += "End.\n"
 
     # Write to file
-    with open( "keymaera/graph.kyx", "w") as keymaeraXFile:
+    with open( output_path, "w") as keymaeraXFile:
         keymaeraXFile.write( keymaera )
 
 
-# Choose random node count in range
-node_count = random.randint( 3, 10 )
+def positive_int( value ):
+    node_count = int( value )
+    if node_count < 1:
+        raise argparse.ArgumentTypeError( "node count must be at least 1" )
+    return node_count
 
-# Graph for n nodes, each edge with p chance to exist
-# Returns a Gn,p random graph, also known as an Erdos-Renyi graph or a binomial graph.
-# Choose 60% chance for each edge to exist, can easily tweak
-G = networkx.gnp_random_graph( node_count, 0.6 )
 
-# Make sure graph is connected
-while not networkx.is_connected( G ):
+def main():
+    parser = argparse.ArgumentParser( description = "Generate a random weighted graph." )
+    parser.add_argument(
+        "--node-count",
+        type = positive_int,
+        help = "number of nodes (defaults to a random count from 3 to 10)",
+    )
+    parser.add_argument(
+        "--output-name",
+        default = "graph",
+        help = "output filename stem for the CSV, PNG, and KeymaeraX files",
+    )
+    args = parser.parse_args()
+
+    if not args.output_name or Path( args.output_name ).name != args.output_name:
+        parser.error( "output name must be a non-empty filename stem, not a path" )
+
+    node_count = args.node_count or random.randint( 3, 10 )
+
+    # Generate a connected Gn,p graph (an Erdos-Renyi graph) with p = 0.6.
     G = networkx.gnp_random_graph( node_count, 0.6 )
+    while not networkx.is_connected( G ):
+        G = networkx.gnp_random_graph( node_count, 0.6 )
 
-# Give weights to each edge
-for ( source, dest ) in G.edges( ):
-    G.edges[source, dest]['weight'] = random.randint( 0, 100 ) / 100
+    # Give weights to each edge
+    for ( source, dest ) in G.edges( ):
+        G.edges[source, dest]['weight'] = random.randint( 0, 100 ) / 100
 
-# Make graph directed for KeymaeraX
-G = G.to_directed( )
+    # Make graph directed for KeymaeraX
+    G = G.to_directed( )
 
-# Put data in CSV for use in other applications
-connections = []
+    # Put data in CSV for use in other applications
+    connections = []
+    for ( source, dest ) in G.edges( ):
+        connections.append( {
+            "source": source,
+            "dest": dest,
+            "weight": G.edges[source, dest]["weight"],
+            "max_flow_rate": "",
+        } )
 
-for ( source, dest ) in G.edges( ):
-    connections.append( {
-        "source": source,
-        "dest": dest,
-        "weight": G.edges[source, dest]["weight"],
-        "max_flow_rate": "",
-    } )
+    # Write related outputs using the requested name.
+    csv_path = Path( "data" ) / f"{args.output_name}.csv"
+    image_path = Path( "data" ) / f"{args.output_name}.png"
+    keymaera_path = Path( "keymaera" ) / f"{args.output_name}.kyx"
+    with open( csv_path, "w", newline="" ) as csvfile:
+        fieldnames = ["source", "dest", "weight", "max_flow_rate"]
+        writer = csv.DictWriter( csvfile, fieldnames = fieldnames )
+        writer.writeheader()
+        writer.writerows( connections )
 
-# write to csv
-with open( "data/graph.csv", "w", newline="" ) as csvfile:
-    fieldnames = ["source", "dest", "weight", "max_flow_rate"]
-    writer = csv.DictWriter( csvfile, fieldnames = fieldnames )
+    keymaerafy( G, keymaera_path )
 
-    writer.writeheader( )
-    writer.writerows( connections )
+    # Draw nodes and edges
+    pos = networkx.spring_layout( G )
+    networkx.draw( G, pos )
 
-# Turn graph into KeymaeraX format
-keymaerafy( G )
+    # Add edge weights
+    networkx.draw_networkx_edge_labels( G, pos, edge_labels = networkx.get_edge_attributes( G, "weight" ) )
+
+    plt.savefig( image_path )
+    plt.close( )
 
 
-# Draw nodes and edges
-pos = networkx.spring_layout( G )
-networkx.draw( G, pos )
-
-# Add edge weights
-networkx.draw_networkx_edge_labels( G, pos, edge_labels = networkx.get_edge_attributes( G, "weight" ) )
-
-plt.savefig( "data/graph.png" )
-
-plt.close( )
+if __name__ == "__main__":
+    main()
