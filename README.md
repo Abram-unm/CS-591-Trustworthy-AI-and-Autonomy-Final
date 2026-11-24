@@ -33,29 +33,22 @@ The intent is to model pipe-reservoir systems between 3-10 reservoirs where each
 
 1. Clone repository to a system with Python.
 2. install package requirements listed in ```requirements.txt```.
-3. Run from the command line, optionally specifying a node count and output name:
-   ```python graph_generation.py --node-count 5 --output-name example```
-   The output name is used as the filename stem for `data/example.csv`,
-   `data/example.png`, and `keymaera/example.kyx`. If omitted, the node count
-   is chosen randomly from 3 to 10 and the output name defaults to `graph`.
+3. Run from the command line, optionally specifying a node count and output name: `python graph_generation.py --node-count 5 --output-name example`
+The output name is used as the filename stem for `data/example.csv`,  `data/example.png`, and`keymaera/example.kyx`. If omitted, the node count is chosen randomly from 3 to 10 and the output name defaults to `graph`.
 
 ### Optional steps
 
 4. Run KeymaeraX.
-5. Import the generated file from ```working_directory/keymaera/<output-name>.kyx```
-   (or `graph.kyx` when using the default output name).
+5. Import the generated file from `working_directory/keymaera/<output-name>.kyx` (or `graph.kyx` when using the default output name).
 6. Run test in KeymaeraX.
 
-To run graph generation, model generation, and the KeymaeraX proof from one
-command, use:
+To run graph generation, model generation, and the KeymaeraX proof (with a provided config) from one command, use:
 
 ```bash
 bash reservoir_test.sh 3 generated_graph overflow_config.example proof
 ```
 
-The arguments are node count, graph filename stem, configuration filename stem
-under `data/`, and output filename stem under `keymaera/`. Choose a configuration
-whose nodes and edges are compatible with the generated graph.
+The arguments are node count, graph filename stem, configuration filename stem under `data/`, and output filename stem under `keymaera/`. Choose a configuration whose nodes and edges are compatible with the generated graph.
 
 Proofs can also be executed from the command line with `keymaerax -prove keymaera/<input_file>.kyx -tool z3 -timeout 60 -out keymaera/<output_file>.kyp`
 
