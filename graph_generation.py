@@ -82,6 +82,7 @@ def main():
     if not args.output_name or Path( args.output_name ).name != args.output_name:
         parser.error( "output name must be a non-empty filename stem, not a path" )
 
+    random.seed( 2 )
     node_count = args.node_count or random.randint( 3, 10 )
 
     # Generate a connected Gn,p graph (an Erdos-Renyi graph) with p = 0.6.
